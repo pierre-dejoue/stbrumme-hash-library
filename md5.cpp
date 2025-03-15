@@ -6,9 +6,7 @@
 
 #include "md5.h"
 
-#ifndef _MSC_VER
-#include <endian.h>
-#endif
+// big endian architectures need #define __BYTE_ORDER __BIG_ENDIAN
 
 namespace stbrumme {
 namespace hash {

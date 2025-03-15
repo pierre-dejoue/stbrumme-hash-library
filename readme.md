@@ -12,6 +12,9 @@ In a nutshell:
 - roughly as fast as Linux core hashing functions
 - open source, zlib license
 
+> [!CAUTION]
+> This fork assumes the platform is Little Endian by default.
+
 You can find code examples, benchmarks and much more on my website https://create.stephan-brumme.com/hash-library/
 
 # How to use
