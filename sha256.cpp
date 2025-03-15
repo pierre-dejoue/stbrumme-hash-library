@@ -55,12 +55,12 @@ void SHA256::reset()
 
 namespace
 {
-  inline uint32_t rotate(uint32_t a, uint32_t c)
+  inline std::uint32_t rotate(std::uint32_t a, std::uint32_t c)
   {
     return (a >> c) | (a << (32 - c));
   }
 
-  inline uint32_t swap(uint32_t x)
+  inline std::uint32_t swap(std::uint32_t x)
   {
 #if defined(__GNUC__) || defined(__clang__)
     return __builtin_bswap32(x);
@@ -75,17 +75,17 @@ namespace
   }
 
   // mix functions for processBlock()
-  inline uint32_t f1(uint32_t e, uint32_t f, uint32_t g)
+  inline std::uint32_t f1(std::uint32_t e, std::uint32_t f, std::uint32_t g)
   {
-    uint32_t term1 = rotate(e, 6) ^ rotate(e, 11) ^ rotate(e, 25);
-    uint32_t term2 = (e & f) ^ (~e & g); //(g ^ (e & (f ^ g)))
+    std::uint32_t term1 = rotate(e, 6) ^ rotate(e, 11) ^ rotate(e, 25);
+    std::uint32_t term2 = (e & f) ^ (~e & g); //(g ^ (e & (f ^ g)))
     return term1 + term2;
   }
 
-  inline uint32_t f2(uint32_t a, uint32_t b, uint32_t c)
+  inline std::uint32_t f2(std::uint32_t a, std::uint32_t b, std::uint32_t c)
   {
-    uint32_t term1 = rotate(a, 2) ^ rotate(a, 13) ^ rotate(a, 22);
-    uint32_t term2 = ((a | b) & c) | (a & b); //(a & (b ^ c)) ^ (b & c);
+    std::uint32_t term1 = rotate(a, 2) ^ rotate(a, 13) ^ rotate(a, 22);
+    std::uint32_t term2 = ((a | b) & c) | (a & b); //(a & (b ^ c)) ^ (b & c);
     return term1 + term2;
   }
 }
@@ -95,19 +95,19 @@ namespace
 void SHA256::processBlock(const void* data)
 {
   // get last hash
-  uint32_t a = m_hash[0];
-  uint32_t b = m_hash[1];
-  uint32_t c = m_hash[2];
-  uint32_t d = m_hash[3];
-  uint32_t e = m_hash[4];
-  uint32_t f = m_hash[5];
-  uint32_t g = m_hash[6];
-  uint32_t h = m_hash[7];
+  std::uint32_t a = m_hash[0];
+  std::uint32_t b = m_hash[1];
+  std::uint32_t c = m_hash[2];
+  std::uint32_t d = m_hash[3];
+  std::uint32_t e = m_hash[4];
+  std::uint32_t f = m_hash[5];
+  std::uint32_t g = m_hash[6];
+  std::uint32_t h = m_hash[7];
 
   // data represented as 16x 32-bit words
-  const uint32_t* input = (uint32_t*) data;
+  const std::uint32_t* input = (std::uint32_t*) data;
   // convert to big endian
-  uint32_t words[64];
+  std::uint32_t words[64];
   int i;
   for (i = 0; i < 16; i++)
 #if defined(__BYTE_ORDER) && (__BYTE_ORDER != 0) && (__BYTE_ORDER == __BIG_ENDIAN)
@@ -116,7 +116,7 @@ void SHA256::processBlock(const void* data)
     words[i] = swap(input[i]);
 #endif
 
-  uint32_t x,y; // temporaries
+  std::uint32_t x,y; // temporaries
 
   // first round
   x = h + f1(e,f,g) + 0x428a2f98 + words[ 0]; y = f2(a,b,c); d += x; h = x + y;
@@ -253,9 +253,9 @@ void SHA256::processBlock(const void* data)
 
 
 /// add arbitrary number of bytes
-void SHA256::add(const void* data, size_t numBytes)
+void SHA256::add(const void* data, std::size_t numBytes)
 {
-  const uint8_t* current = (const uint8_t*) data;
+  const std::uint8_t* current = (const std::uint8_t*) data;
 
   if (m_bufferSize > 0)
   {
@@ -306,13 +306,13 @@ void SHA256::processBuffer()
   // - append length as 64 bit integer
 
   // number of bits
-  size_t paddedLength = m_bufferSize * 8;
+  std::size_t paddedLength = m_bufferSize * 8;
 
   // plus one bit set to 1 (always appended)
   paddedLength++;
 
   // number of bits must be (numBits % 512) = 448
-  size_t lower11Bits = paddedLength & 511;
+  std::size_t lower11Bits = paddedLength & 511;
   if (lower11Bits <= 448)
     paddedLength +=       448 - lower11Bits;
   else
@@ -329,14 +329,14 @@ void SHA256::processBuffer()
   else
     extra[0] = 128;
 
-  size_t i;
+  std::size_t i;
   for (i = m_bufferSize + 1; i < BlockSize; i++)
     m_buffer[i] = 0;
   for (; i < paddedLength; i++)
     extra[i - BlockSize] = 0;
 
   // add message length in bits as 64 bit number
-  uint64_t msgBits = 8 * (m_numBytes + m_bufferSize);
+  std::uint64_t msgBits = 8 * (m_numBytes + m_bufferSize);
   // find right position
   unsigned char* addLength;
   if (paddedLength < BlockSize)
@@ -387,7 +387,7 @@ std::string SHA256::getHash()
 void SHA256::getHash(unsigned char buffer[SHA256::HashBytes])
 {
   // save old hash if buffer is partially filled
-  uint32_t oldHash[HashValues];
+  std::uint32_t oldHash[HashValues];
   for (int i = 0; i < HashValues; i++)
     oldHash[i] = m_hash[i];
 
@@ -409,7 +409,7 @@ void SHA256::getHash(unsigned char buffer[SHA256::HashBytes])
 
 
 /// compute SHA256 of a memory block
-std::string SHA256::operator()(const void* data, size_t numBytes)
+std::string SHA256::operator()(const void* data, std::size_t numBytes)
 {
   reset();
   add(data, numBytes);

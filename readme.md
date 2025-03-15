@@ -15,6 +15,9 @@ In a nutshell:
 > [!CAUTION]
 > This fork assumes the platform is Little Endian by default.
 
+> [!NOTE]
+> Requires C++11.
+
 You can find code examples, benchmarks and much more on my website https://create.stephan-brumme.com/hash-library/
 
 # How to use

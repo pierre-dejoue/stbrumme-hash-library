@@ -23,7 +23,7 @@ Keccak::Keccak(Bits bits)
 /// restart
 void Keccak::reset()
 {
-  for (size_t i = 0; i < StateSize; i++)
+  for (std::size_t i = 0; i < StateSize; i++)
     m_hash[i] = 0;
 
   m_numBytes   = 0;
@@ -35,7 +35,7 @@ void Keccak::reset()
 namespace
 {
   const unsigned int KeccakRounds = 24;
-  const uint64_t XorMasks[KeccakRounds] =
+  const std::uint64_t XorMasks[KeccakRounds] =
   {
     0x0000000000000001ULL, 0x0000000000008082ULL, 0x800000000000808aULL,
     0x8000000080008000ULL, 0x000000000000808bULL, 0x0000000080000001ULL,
@@ -48,13 +48,13 @@ namespace
   };
 
   /// rotate left and wrap around to the right
-  inline uint64_t rotateLeft(uint64_t x, uint8_t numBits)
+  inline std::uint64_t rotateLeft(std::uint64_t x, std::uint8_t numBits)
   {
     return (x << numBits) | (x >> (64 - numBits));
   }
 
   /// convert litte vs big endian
-  inline uint64_t swap(uint64_t x)
+  inline std::uint64_t swap(std::uint64_t x)
   {
 #if defined(__GNUC__) || defined(__clang__)
     return __builtin_bswap64(x);
@@ -93,7 +93,7 @@ void Keccak::processBlock(const void* data)
 #define LITTLEENDIAN(x) (x)
 #endif
 
-  const uint64_t* data64 = (const uint64_t*) data;
+  const std::uint64_t* data64 = (const std::uint64_t*) data;
   // mix data into state
   for (unsigned int i = 0; i < m_blockSize / 8; i++)
     m_hash[i] ^= LITTLEENDIAN(data64[i]);
@@ -102,13 +102,13 @@ void Keccak::processBlock(const void* data)
   for (unsigned int round = 0; round < KeccakRounds; round++)
   {
     // Theta
-    uint64_t coefficients[5];
+    std::uint64_t coefficients[5];
     for (unsigned int i = 0; i < 5; i++)
       coefficients[i] = m_hash[i] ^ m_hash[i + 5] ^ m_hash[i + 10] ^ m_hash[i + 15] ^ m_hash[i + 20];
 
     for (unsigned int i = 0; i < 5; i++)
     {
-      uint64_t one = coefficients[mod5(i + 4)] ^ rotateLeft(coefficients[mod5(i + 1)], 1);
+      std::uint64_t one = coefficients[mod5(i + 4)] ^ rotateLeft(coefficients[mod5(i + 1)], 1);
       m_hash[i     ] ^= one;
       m_hash[i +  5] ^= one;
       m_hash[i + 10] ^= one;
@@ -117,10 +117,10 @@ void Keccak::processBlock(const void* data)
     }
 
     // temporary
-    uint64_t one;
+    std::uint64_t one;
 
     // Rho Pi
-    uint64_t last = m_hash[1];
+    std::uint64_t last = m_hash[1];
     one = m_hash[10]; m_hash[10] = rotateLeft(last,  1); last = one;
     one = m_hash[ 7]; m_hash[ 7] = rotateLeft(last,  3); last = one;
     one = m_hash[11]; m_hash[11] = rotateLeft(last,  6); last = one;
@@ -150,8 +150,8 @@ void Keccak::processBlock(const void* data)
     for (unsigned int j = 0; j < StateSize; j += 5)
     {
       // temporaries
-      uint64_t one = m_hash[j];
-      uint64_t two = m_hash[j + 1];
+      std::uint64_t one = m_hash[j];
+      std::uint64_t two = m_hash[j + 1];
 
       m_hash[j]     ^= m_hash[j + 2] & ~two;
       m_hash[j + 1] ^= m_hash[j + 3] & ~m_hash[j + 2];
@@ -167,9 +167,9 @@ void Keccak::processBlock(const void* data)
 
 
 /// add arbitrary number of bytes
-void Keccak::add(const void* data, size_t numBytes)
+void Keccak::add(const void* data, std::size_t numBytes)
 {
-  const uint8_t* current = (const uint8_t*) data;
+  const std::uint8_t* current = (const std::uint8_t*) data;
 
   if (m_bufferSize > 0)
   {
@@ -216,7 +216,7 @@ void Keccak::processBuffer()
   unsigned int blockSize = 200 - 2 * (m_bits / 8);
 
   // add padding
-  size_t offset = m_bufferSize;
+  std::size_t offset = m_bufferSize;
   // add a "1" byte
   m_buffer[offset++] = 1;
   // fill with zeros
@@ -234,7 +234,7 @@ void Keccak::processBuffer()
 std::string Keccak::getHash()
 {
   // save hash state
-  uint64_t oldHash[StateSize];
+  std::uint64_t oldHash[StateSize];
   for (unsigned int i = 0; i < StateSize; i++)
     oldHash[i] = m_hash[i];
 
@@ -244,7 +244,7 @@ std::string Keccak::getHash()
   // convert hash to string
   static const char dec2hex[16 + 1] = "0123456789abcdef";
 
-  // number of significant elements in hash (uint64_t)
+  // number of significant elements in hash (std::uint64_t)
   unsigned int hashLength = m_bits / 64;
 
   std::string result;
@@ -279,7 +279,7 @@ std::string Keccak::getHash()
 
 
 /// compute Keccak hash of a memory block
-std::string Keccak::operator()(const void* data, size_t numBytes)
+std::string Keccak::operator()(const void* data, std::size_t numBytes)
 {
   reset();
   add(data, numBytes);

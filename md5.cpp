@@ -35,33 +35,33 @@ void MD5::reset()
 namespace
 {
   // mix functions for processBlock()
-  inline uint32_t f1(uint32_t b, uint32_t c, uint32_t d)
+  inline std::uint32_t f1(std::uint32_t b, std::uint32_t c, std::uint32_t d)
   {
     return d ^ (b & (c ^ d)); // original: f = (b & c) | ((~b) & d);
   }
 
-  inline uint32_t f2(uint32_t b, uint32_t c, uint32_t d)
+  inline std::uint32_t f2(std::uint32_t b, std::uint32_t c, std::uint32_t d)
   {
     return c ^ (d & (b ^ c)); // original: f = (b & d) | (c & (~d));
   }
 
-  inline uint32_t f3(uint32_t b, uint32_t c, uint32_t d)
+  inline std::uint32_t f3(std::uint32_t b, std::uint32_t c, std::uint32_t d)
   {
     return b ^ c ^ d;
   }
 
-  inline uint32_t f4(uint32_t b, uint32_t c, uint32_t d)
+  inline std::uint32_t f4(std::uint32_t b, std::uint32_t c, std::uint32_t d)
   {
     return c ^ (b | ~d);
   }
 
-  inline uint32_t rotate(uint32_t a, uint32_t c)
+  inline std::uint32_t rotate(std::uint32_t a, std::uint32_t c)
   {
     return (a << c) | (a >> (32 - c));
   }
 
 #if defined(__BYTE_ORDER) && (__BYTE_ORDER != 0) && (__BYTE_ORDER == __BIG_ENDIAN)
-  inline uint32_t swap(uint32_t x)
+  inline std::uint32_t swap(std::uint32_t x)
   {
 #if defined(__GNUC__) || defined(__clang__)
     return __builtin_bswap32(x);
@@ -82,13 +82,13 @@ namespace
 void MD5::processBlock(const void* data)
 {
   // get last hash
-  uint32_t a = m_hash[0];
-  uint32_t b = m_hash[1];
-  uint32_t c = m_hash[2];
-  uint32_t d = m_hash[3];
+  std::uint32_t a = m_hash[0];
+  std::uint32_t b = m_hash[1];
+  std::uint32_t c = m_hash[2];
+  std::uint32_t d = m_hash[3];
 
   // data represented as 16x 32-bit words
-  const uint32_t* words = (uint32_t*) data;
+  const std::uint32_t* words = (std::uint32_t*) data;
 
   // computations are little endian, swap data if necessary
 #if defined(__BYTE_ORDER) && (__BYTE_ORDER != 0) && (__BYTE_ORDER == __BIG_ENDIAN)
@@ -98,40 +98,40 @@ void MD5::processBlock(const void* data)
 #endif
 
   // first round
-  uint32_t word0  = LITTLEENDIAN(words[ 0]);
+  std::uint32_t word0  = LITTLEENDIAN(words[ 0]);
   a = rotate(a + f1(b,c,d) + word0  + 0xd76aa478,  7) + b;
-  uint32_t word1  = LITTLEENDIAN(words[ 1]);
+  std::uint32_t word1  = LITTLEENDIAN(words[ 1]);
   d = rotate(d + f1(a,b,c) + word1  + 0xe8c7b756, 12) + a;
-  uint32_t word2  = LITTLEENDIAN(words[ 2]);
+  std::uint32_t word2  = LITTLEENDIAN(words[ 2]);
   c = rotate(c + f1(d,a,b) + word2  + 0x242070db, 17) + d;
-  uint32_t word3  = LITTLEENDIAN(words[ 3]);
+  std::uint32_t word3  = LITTLEENDIAN(words[ 3]);
   b = rotate(b + f1(c,d,a) + word3  + 0xc1bdceee, 22) + c;
 
-  uint32_t word4  = LITTLEENDIAN(words[ 4]);
+  std::uint32_t word4  = LITTLEENDIAN(words[ 4]);
   a = rotate(a + f1(b,c,d) + word4  + 0xf57c0faf,  7) + b;
-  uint32_t word5  = LITTLEENDIAN(words[ 5]);
+  std::uint32_t word5  = LITTLEENDIAN(words[ 5]);
   d = rotate(d + f1(a,b,c) + word5  + 0x4787c62a, 12) + a;
-  uint32_t word6  = LITTLEENDIAN(words[ 6]);
+  std::uint32_t word6  = LITTLEENDIAN(words[ 6]);
   c = rotate(c + f1(d,a,b) + word6  + 0xa8304613, 17) + d;
-  uint32_t word7  = LITTLEENDIAN(words[ 7]);
+  std::uint32_t word7  = LITTLEENDIAN(words[ 7]);
   b = rotate(b + f1(c,d,a) + word7  + 0xfd469501, 22) + c;
 
-  uint32_t word8  = LITTLEENDIAN(words[ 8]);
+  std::uint32_t word8  = LITTLEENDIAN(words[ 8]);
   a = rotate(a + f1(b,c,d) + word8  + 0x698098d8,  7) + b;
-  uint32_t word9  = LITTLEENDIAN(words[ 9]);
+  std::uint32_t word9  = LITTLEENDIAN(words[ 9]);
   d = rotate(d + f1(a,b,c) + word9  + 0x8b44f7af, 12) + a;
-  uint32_t word10 = LITTLEENDIAN(words[10]);
+  std::uint32_t word10 = LITTLEENDIAN(words[10]);
   c = rotate(c + f1(d,a,b) + word10 + 0xffff5bb1, 17) + d;
-  uint32_t word11 = LITTLEENDIAN(words[11]);
+  std::uint32_t word11 = LITTLEENDIAN(words[11]);
   b = rotate(b + f1(c,d,a) + word11 + 0x895cd7be, 22) + c;
 
-  uint32_t word12 = LITTLEENDIAN(words[12]);
+  std::uint32_t word12 = LITTLEENDIAN(words[12]);
   a = rotate(a + f1(b,c,d) + word12 + 0x6b901122,  7) + b;
-  uint32_t word13 = LITTLEENDIAN(words[13]);
+  std::uint32_t word13 = LITTLEENDIAN(words[13]);
   d = rotate(d + f1(a,b,c) + word13 + 0xfd987193, 12) + a;
-  uint32_t word14 = LITTLEENDIAN(words[14]);
+  std::uint32_t word14 = LITTLEENDIAN(words[14]);
   c = rotate(c + f1(d,a,b) + word14 + 0xa679438e, 17) + d;
-  uint32_t word15 = LITTLEENDIAN(words[15]);
+  std::uint32_t word15 = LITTLEENDIAN(words[15]);
   b = rotate(b + f1(c,d,a) + word15 + 0x49b40821, 22) + c;
 
   // second round
@@ -206,9 +206,9 @@ void MD5::processBlock(const void* data)
 
 
 /// add arbitrary number of bytes
-void MD5::add(const void* data, size_t numBytes)
+void MD5::add(const void* data, std::size_t numBytes)
 {
-  const uint8_t* current = (const uint8_t*) data;
+  const std::uint8_t* current = (const std::uint8_t*) data;
 
   if (m_bufferSize > 0)
   {
@@ -259,13 +259,13 @@ void MD5::processBuffer()
   // - append length as 64 bit integer
 
   // number of bits
-  size_t paddedLength = m_bufferSize * 8;
+  std::size_t paddedLength = m_bufferSize * 8;
 
   // plus one bit set to 1 (always appended)
   paddedLength++;
 
   // number of bits must be (numBits % 512) = 448
-  size_t lower11Bits = paddedLength & 511;
+  std::size_t lower11Bits = paddedLength & 511;
   if (lower11Bits <= 448)
     paddedLength +=       448 - lower11Bits;
   else
@@ -282,14 +282,14 @@ void MD5::processBuffer()
   else
     extra[0] = 128;
 
-  size_t i;
+  std::size_t i;
   for (i = m_bufferSize + 1; i < BlockSize; i++)
     m_buffer[i] = 0;
   for (; i < paddedLength; i++)
     extra[i - BlockSize] = 0;
 
   // add message length in bits as 64 bit number
-  uint64_t msgBits = 8 * (m_numBytes + m_bufferSize);
+  std::uint64_t msgBits = 8 * (m_numBytes + m_bufferSize);
   // find right position
   unsigned char* addLength;
   if (paddedLength < BlockSize)
@@ -340,7 +340,7 @@ std::string MD5::getHash()
 void MD5::getHash(unsigned char buffer[MD5::HashBytes])
 {
   // save old hash if buffer is partially filled
-  uint32_t oldHash[HashValues];
+  std::uint32_t oldHash[HashValues];
   for (int i = 0; i < HashValues; i++)
     oldHash[i] = m_hash[i];
 
@@ -362,7 +362,7 @@ void MD5::getHash(unsigned char buffer[MD5::HashBytes])
 
 
 /// compute MD5 of a memory block
-std::string MD5::operator()(const void* data, size_t numBytes)
+std::string MD5::operator()(const void* data, std::size_t numBytes)
 {
   reset();
   add(data, numBytes);

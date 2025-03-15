@@ -7,21 +7,12 @@
 #pragma once
 
 //#include "hash.h"
+#include <cstddef>
+#include <cstdint>
 #include <string>
-
-// define fixed size integer types
-#ifdef _MSC_VER
-// Windows
-typedef unsigned __int8  uint8_t;
-typedef unsigned __int64 uint64_t;
-#else
-// GCC
-#include <stdint.h>
-#endif
 
 namespace stbrumme {
 namespace hash {
-
 
 /// compute SHA3 hash
 /** Usage:
@@ -46,12 +37,12 @@ public:
   explicit SHA3(Bits bits = Bits256);
 
   /// compute hash of a memory block
-  std::string operator()(const void* data, size_t numBytes);
+  std::string operator()(const void* data, std::size_t numBytes);
   /// compute hash of a string, excluding final zero
   std::string operator()(const std::string& text);
 
   /// add arbitrary number of bytes
-  void add(const void* data, size_t numBytes);
+  void add(const void* data, std::size_t numBytes);
 
   /// return latest hash as hex characters
   std::string getHash();
@@ -70,15 +61,15 @@ private:
          MaxBlockSize =  200 - 2 * (224 / 8) };
 
   /// hash
-  uint64_t m_hash[StateSize];
+  std::uint64_t m_hash[StateSize];
   /// size of processed data in bytes
-  uint64_t m_numBytes;
+  std::uint64_t m_numBytes;
   /// block size (less or equal to MaxBlockSize)
-  size_t   m_blockSize;
+  std::size_t   m_blockSize;
   /// valid bytes in m_buffer
-  size_t   m_bufferSize;
+  std::size_t   m_bufferSize;
   /// bytes not processed yet
-  uint8_t  m_buffer[MaxBlockSize];
+  std::uint8_t  m_buffer[MaxBlockSize];
   /// variant
   Bits     m_bits;
 };

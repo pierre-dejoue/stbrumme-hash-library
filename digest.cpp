@@ -66,14 +66,14 @@ int main(int argc, char** argv)
   }
 
   // each cycle processes about 1 MByte (divisible by 144 => improves Keccak/SHA3 performance)
-  const size_t BufferSize = 144*7*1024;
+  const std::size_t BufferSize = 144*7*1024;
   char* buffer = new char[BufferSize];
 
   // process file
   while (*input)
   {
     input->read(buffer, BufferSize);
-    std::size_t numBytesRead = size_t(input->gcount());
+    std::size_t numBytesRead = std::size_t(input->gcount());
 
     if (computeCrc32)
       digestCrc32 .add(buffer, numBytesRead);
