@@ -16,6 +16,8 @@
 #include <iostream>
 #include <fstream>
 
+using namespace stbrumme::hash;
+
 int main(int argc, char** argv)
 {
   // syntax check

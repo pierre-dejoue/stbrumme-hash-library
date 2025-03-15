@@ -20,6 +20,8 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h>
 #endif
 
+namespace stbrumme {
+namespace hash {
 
 /// compute SHA256 hash
 /** Usage:
@@ -76,3 +78,6 @@ private:
   /// hash, stored as integers
   uint32_t m_hash[HashValues];
 };
+
+} // namespace hash
+} // namespace stbrumme

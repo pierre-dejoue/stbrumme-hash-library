@@ -11,6 +11,8 @@
 #include <endian.h>
 #endif
 
+namespace stbrumme {
+namespace hash {
 
 /// same as reset()
 SHA1::SHA1()
@@ -324,3 +326,6 @@ std::string SHA1::operator()(const std::string& text)
   add(text.c_str(), text.size());
   return getHash();
 }
+
+} // namespace hash
+} // namespace stbrumme

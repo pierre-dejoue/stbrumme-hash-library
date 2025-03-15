@@ -13,6 +13,9 @@
 
 #include <iostream>
 
+namespace stbrumme {
+namespace hash {
+
 
 /// same as reset()
 SHA3::SHA3(Bits bits)
@@ -298,3 +301,6 @@ std::string SHA3::operator()(const std::string& text)
   add(text.c_str(), text.size());
   return getHash();
 }
+
+} // namespace hash
+} // namespace stbrumme

@@ -30,6 +30,9 @@
 #include <string>
 #include <cstring> // memcpy
 
+namespace stbrumme {
+namespace hash {
+
 /// compute HMAC hash of data and key using MD5, SHA1 or SHA256
 template <typename HashMethod>
 std::string hmac(const void* data, size_t numDataBytes, const void* key, size_t numKeyBytes)
@@ -81,3 +84,6 @@ std::string hmac(const std::string& data, const std::string& key)
 {
   return hmac<HashMethod>(data.c_str(), data.size(), key.c_str(), key.size());
 }
+
+} // namespace hash
+} // namespace stbrumme

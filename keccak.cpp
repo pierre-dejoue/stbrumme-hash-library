@@ -11,6 +11,8 @@
 #include <endian.h>
 #endif
 
+namespace stbrumme {
+namespace hash {
 
 /// same as reset()
 Keccak::Keccak(Bits bits)
@@ -296,3 +298,6 @@ std::string Keccak::operator()(const std::string& text)
   add(text.c_str(), text.size());
   return getHash();
 }
+
+} // namespace hash
+} // namespace stbrumme

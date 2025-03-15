@@ -4,6 +4,8 @@
 #include "../sha3.h"
 #include <iostream>
 
+using namespace stbrumme::hash;
+
 int main(int argc, char *argv[])
 {
   std::string text = "72a5f501151ca974002f34";

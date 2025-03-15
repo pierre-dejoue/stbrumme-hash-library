@@ -19,6 +19,9 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h>
 #endif
 
+namespace stbrumme {
+namespace hash {
+
 
 /// compute SHA3 hash
 /** Usage:
@@ -79,3 +82,6 @@ private:
   /// variant
   Bits     m_bits;
 };
+
+} // namespace hash
+} // namespace stbrumme

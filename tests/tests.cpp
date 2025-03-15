@@ -21,6 +21,7 @@
 
 #include <iostream>
 
+using namespace stbrumme::hash;
 
 struct TestSet
 {

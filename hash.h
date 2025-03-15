@@ -8,6 +8,9 @@
 
 #include <string>
 
+namespace stbrumme {
+namespace hash {
+
 /// abstract base class
 class Hash
 {
@@ -26,3 +29,6 @@ public:
   /// restart
   virtual void reset() = 0;
 };
+
+} // namespace hash
+} // namespace stbrumme

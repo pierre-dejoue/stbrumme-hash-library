@@ -8,6 +8,8 @@
 #include "../md5.h"
 #include <iostream>
 
+using namespace stbrumme::hash;
+
 int main()
 {
   std::string text = "hello world";

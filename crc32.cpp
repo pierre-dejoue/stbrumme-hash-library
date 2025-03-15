@@ -11,6 +11,8 @@
 #include <endian.h>
 #endif
 
+namespace stbrumme {
+namespace hash {
 
 /// same as reset()
 CRC32::CRC32()
@@ -429,3 +431,6 @@ std::string CRC32::operator()(const std::string& text)
   add(text.c_str(), text.size());
   return getHash();
 }
+
+} // namespace hash
+} // namespace stbrumme

@@ -13,6 +13,8 @@
 
 //#define SHA2_224_SEED_VECTOR
 
+namespace stbrumme {
+namespace hash {
 
 /// same as reset()
 SHA256::SHA256()
@@ -426,3 +428,6 @@ std::string SHA256::operator()(const std::string& text)
   add(text.c_str(), text.size());
   return getHash();
 }
+
+} // namespace hash
+} // namespace stbrumme

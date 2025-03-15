@@ -9,6 +9,9 @@
 //#include "hash.h"
 #include <string>
 
+namespace stbrumme {
+namespace hash {
+
 // define fixed size integer types
 #ifdef _MSC_VER
 // Windows
@@ -67,3 +70,6 @@ private:
   /// hash
   uint32_t m_hash;
 };
+
+} // namespace hash
+} // namespace stbrumme
